@@ -1,0 +1,27 @@
+<%- include('partials/header', { title }) %>
+
+<section class="feed">
+  <h1>Widget demo</h1>
+  <p class="muted">This page imitates an external site with an embedded Telegram Site widget.</p>
+
+  <article class="post">
+    <div id="telegram-site-widget"></div>
+  </article>
+
+  <pre class="codeBlock">&lt;div id="telegram-site-widget"&gt;&lt;/div&gt;
+&lt;script
+  src="/widget.js"
+  data-api-base-url="<%= apiBaseUrl %>"
+  data-site="default"
+  data-limit="5"
+&gt;&lt;/script&gt;</pre>
+</section>
+
+<script
+  src="/widget.js"
+  data-api-base-url="<%= apiBaseUrl %>"
+  data-site="default"
+  data-limit="5"
+></script>
+
+<%- include('partials/footer') %>

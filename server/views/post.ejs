@@ -1,0 +1,48 @@
+<%- include('partials/header', { title }) %>
+
+<section class="feed">
+  <p class="post__links">
+    <a href="/feed">Back to feed</a>
+  </p>
+
+  <% if (!post) { %>
+    <article class="post">
+      <h1>Post not found</h1>
+      <p class="muted">There is no post with this id.</p>
+    </article>
+  <% } else { %>
+    <article class="post post--single">
+      <header class="post__header">
+        <div>
+          <div class="post__channel">
+            <%= post.channel_title || 'Telegram channel' %>
+            <% if (post.channel_username) { %>
+              <span class="muted">@<%= post.channel_username %></span>
+            <% } %>
+          </div>
+          <time class="muted" datetime="<%= (post.published_at || post.created_at).toISOString() %>">
+            <%= new Intl.DateTimeFormat('ru-RU', { dateStyle: 'medium', timeStyle: 'short' }).format(post.published_at || post.created_at) %>
+          </time>
+        </div>
+      </header>
+
+      <% if (post.text || post.caption) { %>
+        <p class="post__text"><%= post.text || post.caption %></p>
+      <% } %>
+
+      <% if (post.media_type === 'photo' && post.media_url) { %>
+        <img class="post__image" src="<%= post.media_url %>" alt="">
+      <% } else if (post.media_type === 'photo' && post.media_status === 'error') { %>
+        <p class="post__media-error">Photo was not downloaded.</p>
+      <% } %>
+
+      <% if (post.original_url) { %>
+        <p class="post__links">
+          <a href="<%= post.original_url %>" target="_blank" rel="noreferrer">Open in Telegram</a>
+        </p>
+      <% } %>
+    </article>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>
