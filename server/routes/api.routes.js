@@ -12,7 +12,8 @@ const {
   createChannelRequest,
   findLatestChannelRequests,
 } = require('../repositories/channel-requests.repository');
-const { findSiteByChannelQuery, findSiteBySlug } = require('../repositories/sites.repository');
+const { findSiteByChannelQuery } = require('../repositories/sites.repository');
+const { resolveSiteBySlug } = require('../services/site-resolver.service');
 
 const apiRouter = express.Router();
 
@@ -144,7 +145,7 @@ apiRouter.get('/channel-requests', async (req, res, next) => {
 
 apiRouter.get('/sites/:slug', async (req, res, next) => {
   try {
-    const site = await findSiteBySlug(req.params.slug);
+    const site = await resolveSiteBySlug(req.params.slug);
 
     if (!site) {
       return res.status(404).json({ error: 'Site not found' });
@@ -158,7 +159,7 @@ apiRouter.get('/sites/:slug', async (req, res, next) => {
 
 apiRouter.get('/sites/:slug/posts', async (req, res, next) => {
   try {
-    const site = await findSiteBySlug(req.params.slug);
+    const site = await resolveSiteBySlug(req.params.slug);
 
     if (!site) {
       return res.status(404).json({ error: 'Site not found' });
@@ -197,7 +198,7 @@ apiRouter.get('/sites/:slug/posts/:id', async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid post id' });
     }
 
-    const site = await findSiteBySlug(req.params.slug);
+    const site = await resolveSiteBySlug(req.params.slug);
 
     if (!site) {
       return res.status(404).json({ error: 'Site not found' });

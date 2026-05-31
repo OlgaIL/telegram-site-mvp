@@ -73,6 +73,11 @@ Returns public site metadata.
   "name": "Test Site Tele",
   "title": "Test Site Tele",
   "description": "Telegram-powered updates",
+  "domain": {
+    "subdomain": null,
+    "customDomain": null,
+    "status": "not_configured"
+  },
   "features": {
     "widgetEnabled": true,
     "blogEnabled": true

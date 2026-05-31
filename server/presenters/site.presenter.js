@@ -5,6 +5,11 @@ function presentSite(row) {
     name: row.name,
     title: row.title,
     description: row.description,
+    domain: {
+      subdomain: row.subdomain,
+      customDomain: row.custom_domain,
+      status: row.domain_status || 'not_configured',
+    },
     features: {
       widgetEnabled: row.widget_enabled,
       blogEnabled: row.blog_enabled,

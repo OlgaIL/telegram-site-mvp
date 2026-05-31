@@ -6,15 +6,16 @@
 - Add auto-refresh for widget.
 - Add retry strategy for failed media downloads.
 - Decide how to clean old local media files.
-- Normalize docs before first commit.
+- Add real host-based site resolution after DNS/VPS setup.
 
 ## Product Architecture
 
-- Expand the initial `sites` model into full `projects` / `settings`.
-- Replace draft channel request flow with auth + real onboarding.
-- Add widget mode.
-- Add customer-facing blog/subdomain mode.
+- Add auth after the `sites` model is stable.
+- Add user ownership for sites and channel requests.
 - Add dashboard/admin for site settings.
+- Add widget mode production flow.
+- Add customer-facing blog/subdomain mode.
+- Add custom client domain onboarding.
 
 ## Deployment
 
