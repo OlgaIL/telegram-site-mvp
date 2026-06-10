@@ -82,3 +82,29 @@ export async function createChannelRequest({ telegramChannel, email, comment }) 
 export async function getChannelRequests() {
   return fetchJson('/api/channel-requests');
 }
+
+export async function getMe() {
+  const response = await fetch(joinUrl(API_BASE_URL, '/api/me'), {
+    cache: 'no-store',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function logout() {
+  const response = await fetch(joinUrl(API_BASE_URL, '/auth/logout'), {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Logout failed: ${response.status}`);
+  }
+
+  return response.json();
+}

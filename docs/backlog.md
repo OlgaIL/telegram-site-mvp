@@ -2,7 +2,7 @@
 
 ## Technical Debt
 
-- Add authorization before exposing `/admin/channel-requests`.
+- Protect `/admin/channel-requests` with the new auth layer.
 - Add auto-refresh for widget.
 - Add retry strategy for failed media downloads.
 - Decide how to clean old local media files.
@@ -10,7 +10,7 @@
 
 ## Product Architecture
 
-- Add auth after the `sites` model is stable.
+- Complete Google OAuth live credentials and callback setup.
 - Add user ownership for sites and channel requests.
 - Add dashboard/admin for site settings.
 - Add widget mode production flow.

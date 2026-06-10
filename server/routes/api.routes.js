@@ -8,12 +8,14 @@ const {
 const { presentPost } = require('../presenters/post.presenter');
 const { presentChannelRequest } = require('../presenters/channel-request.presenter');
 const { presentSite } = require('../presenters/site.presenter');
+const { presentUser } = require('../presenters/user.presenter');
 const {
   createChannelRequest,
   findLatestChannelRequests,
 } = require('../repositories/channel-requests.repository');
 const { findSiteByChannelQuery } = require('../repositories/sites.repository');
 const { resolveSiteBySlug } = require('../services/site-resolver.service');
+const { getCurrentUser } = require('../services/auth.service');
 
 const apiRouter = express.Router();
 
@@ -49,6 +51,19 @@ apiRouter.get('/posts', async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+});
+
+apiRouter.get('/me', async (req, res, next) => {
+  try {
+    const user = await getCurrentUser(req);
+
+    return res.json({
+      authenticated: Boolean(user),
+      user: user ? presentUser(user) : null,
+    });
+  } catch (err) {
+    return next(err);
   }
 });
 

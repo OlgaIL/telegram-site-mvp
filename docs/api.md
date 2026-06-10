@@ -2,6 +2,58 @@
 
 Read-only endpoints for posts.
 
+Auth endpoints use httpOnly session cookies.
+
+## GET /api/me
+
+Returns the current authenticated user.
+
+```json
+{
+  "authenticated": true,
+  "user": {
+    "id": "1",
+    "email": "owner@example.com",
+    "name": "Owner",
+    "avatarUrl": "https://...",
+    "createdAt": "2026-06-08T16:10:54.000Z"
+  }
+}
+```
+
+Anonymous response:
+
+```json
+{
+  "authenticated": false,
+  "user": null
+}
+```
+
+## GET /auth/yandex
+
+Starts Yandex OAuth and redirects to Yandex.
+
+## GET /auth/yandex/callback
+
+Completes Yandex OAuth, creates/updates local user, starts a session, and redirects to the frontend dashboard.
+
+## GET /auth/google
+
+Starts Google OAuth. Requires Google OAuth env values before live use.
+
+## GET /auth/google/callback
+
+Completes Google OAuth, creates/updates local user, starts a session, and redirects to the frontend dashboard.
+
+## POST /auth/logout
+
+Deletes the current session cookie.
+
+```json
+{ "ok": true }
+```
+
 ## GET /api/posts
 
 Query params:

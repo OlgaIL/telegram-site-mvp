@@ -75,6 +75,8 @@ Backend health: http://localhost:3000/health
 API posts:      http://localhost:3000/api/posts
 Technical feed: http://localhost:3000/feed
 Frontend site:  http://localhost:3001/
+Login:          http://localhost:3001/login
+Dashboard:      http://localhost:3001/dashboard
 ```
 
 ## Telegram Live Test
@@ -119,6 +121,19 @@ TELEGRAM_WEBHOOK_SECRET=
 TELEGRAM_PROXY_URL=
 PUBLIC_BASE_URL=http://localhost:3000
 FRONTEND_ORIGIN=http://localhost:3001
+AUTH_SUCCESS_REDIRECT_URL=http://localhost:3001/dashboard
+AUTH_FAILURE_REDIRECT_URL=http://localhost:3001/login?error=oauth_failed
+SESSION_COOKIE_NAME=telegram_site_session
+SESSION_TTL_DAYS=30
+
+YANDEX_CLIENT_ID=
+YANDEX_CLIENT_SECRET=
+YANDEX_CALLBACK_URL=http://localhost:3000/auth/yandex/callback
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+
 UPLOADS_DIR=uploads/telegram
 ```
 
@@ -150,13 +165,18 @@ Next.js frontend /, /site/:slug, /site/:slug/post/:id
 Channel request page /add-channel
 Internal draft admin /admin/channel-requests
 Client-side auto-refresh for site feeds
+Yandex OAuth foundation
+Google OAuth route scaffold
+Auth session cookie and /api/me
+Dashboard draft /dashboard
 ```
 
 Backlog:
 
 ```text
 Domain and subdomain routing
-User auth and dashboard
+Google OAuth credentials and live test
+User-site ownership
 Site settings UI
 Widget production hardening
 VPS deployment

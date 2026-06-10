@@ -7,6 +7,7 @@ const { healthRouter } = require('./routes/health.routes');
 const { feedRouter } = require('./routes/feed.routes');
 const { telegramRouter } = require('./routes/telegram.routes');
 const { widgetRouter } = require('./routes/widget.routes');
+const { authRouter } = require('./routes/auth.routes');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', env.frontendOrigin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -31,6 +33,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/uploads/telegram', express.static(path.resolve(env.uploadsDir)));
 
 app.use(healthRouter);
+app.use('/auth', authRouter);
 app.use('/api', apiRouter);
 app.use(feedRouter);
 app.use(widgetRouter);

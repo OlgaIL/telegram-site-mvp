@@ -12,6 +12,7 @@ export default function AppShell({ children }) {
           <Link href="/">Find channel</Link>
           <Link href="/site/default">Demo site</Link>
           <Link href="/add-channel">Add channel</Link>
+          <Link href="/dashboard">Dashboard</Link>
         </nav>
       </header>
 
