@@ -18,12 +18,12 @@ export default async function SitePostPage({ params }) {
   return (
     <main className="page pageNarrow">
       <p className="backLink">
-        <Link href={`/site/${site.slug}`}>Back to posts</Link>
+        <Link href={`/site/${site.slug}`}>Назад к ленте</Link>
       </p>
 
       <article className="postArticle">
         <div className="postMeta">
-          <span>{post.channel.title || site.title || 'Telegram channel'}</span>
+          <span>{post.channel.title || site.title || 'Telegram-канал'}</span>
           <time dateTime={post.publishedAt || post.createdAt}>
             {formatDate(post.publishedAt || post.createdAt)}
           </time>
@@ -38,7 +38,7 @@ export default async function SitePostPage({ params }) {
         {post.originalUrl ? (
           <p className="postActions">
             <a href={post.originalUrl} target="_blank" rel="noreferrer">
-              Open in Telegram
+              Открыть в Telegram
             </a>
           </p>
         ) : null}

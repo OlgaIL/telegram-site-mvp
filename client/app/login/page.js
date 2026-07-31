@@ -9,28 +9,22 @@ export default async function LoginPage({ searchParams }) {
   const error = params?.error;
 
   return (
-    <main className="page pageNarrow">
-      <header className="siteHeader">
-        <p className="eyebrow">Account</p>
-        <h1>Sign in</h1>
-        <p>Use an external account. We do not store passwords in this MVP.</p>
-      </header>
-
+    <main className="page pageNarrow authPage">
       {error ? (
         <section className="lookupResult lookupResultError">
-          <h2>Login failed</h2>
-          <p className="muted">Please try again or check OAuth settings.</p>
+          <h2>Не удалось войти</h2>
+          <p className="muted">Попробуйте еще раз или проверьте настройки OAuth.</p>
         </section>
       ) : null}
 
-      <section className="lookupResult">
-        <h2>Choose provider</h2>
+      <section className="authPanel">
+        <p className="authPrompt">Выберите удобный способ входа</p>
         <div className="authActions">
-          <a className="authButton" href={joinUrl(API_BASE_URL, '/auth/yandex')}>
-            Continue with Yandex
+          <a className="authButton" href={joinUrl(API_BASE_URL, '/auth/google')}>
+            Войти через Google
           </a>
-          <a className="authButton authButtonSecondary" href={joinUrl(API_BASE_URL, '/auth/google')}>
-            Continue with Google
+          <a className="authButton" href={joinUrl(API_BASE_URL, '/auth/yandex')}>
+            Войти через Яндекс
           </a>
         </div>
       </section>

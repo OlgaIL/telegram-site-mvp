@@ -11,27 +11,27 @@ export default async function ChannelRequestsAdminPage() {
   return (
     <main className="page">
       <p className="backLink">
-        <Link href="/">Back to site search</Link>
+        <Link href="/">Назад к поиску</Link>
       </p>
 
       <header className="siteHeader">
-        <p className="eyebrow">Internal draft</p>
-        <h1>Channel requests</h1>
-        <p>This is a temporary internal page. Authorization and request management will be added later.</p>
+        <p className="eyebrow">Внутренний черновик</p>
+        <h1>Заявки на подключение</h1>
+        <p>Временная внутренняя страница. Защиту доступа и управление статусами добавим отдельно.</p>
       </header>
 
       <section className="lookupResult internalNotice">
-        <h2>Internal page</h2>
-        <p className="muted">This route is not part of the public user flow yet.</p>
+        <h2>Служебная страница</h2>
+        <p className="muted">Этот маршрут пока не входит в публичный пользовательский сценарий.</p>
       </section>
 
       {requests.length === 0 ? (
         <section className="lookupResult">
-          <h2>No requests yet</h2>
-          <p className="muted">New channel requests will appear here after users submit the add channel form.</p>
+          <h2>Заявок пока нет</h2>
+          <p className="muted">Новые заявки появятся здесь после отправки формы подключения канала.</p>
         </section>
       ) : (
-        <section className="adminList" aria-label="Channel requests">
+        <section className="adminList" aria-label="Заявки на подключение каналов">
           {requests.map((request) => (
             <article className="adminCard" key={request.id}>
               <div className="adminCardHeader">
@@ -44,7 +44,7 @@ export default async function ChannelRequestsAdminPage() {
 
               {request.comment ? <p className="postText">{request.comment}</p> : null}
 
-              <p className="muted">Created: {formatDate(request.createdAt)}</p>
+              <p className="muted">Создана: {formatDate(request.createdAt)}</p>
             </article>
           ))}
         </section>

@@ -96,6 +96,19 @@ export async function getMe() {
   return response.json();
 }
 
+export async function getMeWithCookie(cookieHeader = '') {
+  const response = await fetch(joinUrl(API_BASE_URL, '/api/me'), {
+    cache: 'no-store',
+    headers: cookieHeader ? { cookie: cookieHeader } : {},
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
 export async function logout() {
   const response = await fetch(joinUrl(API_BASE_URL, '/auth/logout'), {
     method: 'POST',

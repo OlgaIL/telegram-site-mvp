@@ -63,7 +63,7 @@ export default function SiteFeed({ site, initialPosts, limit = 20 }) {
         setLastRefreshAt(new Date());
       } catch (err) {
         if (isMounted) {
-          setRefreshError('Could not refresh posts.');
+          setRefreshError('Не удалось обновить ленту.');
         }
       }
     }
@@ -79,19 +79,19 @@ export default function SiteFeed({ site, initialPosts, limit = 20 }) {
   return (
     <>
       <div className="refreshStatus">
-        <span>Auto-refresh every 10 seconds</span>
-        {lastRefreshAt ? <span>Last check: {formatDate(lastRefreshAt.toISOString())}</span> : null}
+        <span>Лента обновляется каждые 10 секунд</span>
+        {lastRefreshAt ? <span>Последняя проверка: {formatDate(lastRefreshAt.toISOString())}</span> : null}
         {refreshError ? <span className="refreshError">{refreshError}</span> : null}
       </div>
 
-      <section className="postList" aria-label="Posts">
+      <section className="postList" aria-label="Посты">
         {posts.length === 0 ? (
-          <p className="muted">Posts are not here yet.</p>
+          <p className="muted">Постов пока нет.</p>
         ) : (
           posts.map((post) => (
             <article className="postCard" key={post.id}>
               <div className="postMeta">
-                <span>{post.channel.title || 'Telegram channel'}</span>
+                <span>{post.channel.title || 'Telegram-канал'}</span>
                 <time dateTime={post.publishedAt || post.createdAt}>
                   {formatDate(post.publishedAt || post.createdAt)}
                 </time>
@@ -104,10 +104,10 @@ export default function SiteFeed({ site, initialPosts, limit = 20 }) {
               ) : null}
 
               <div className="postActions">
-                <Link href={`/site/${site.slug}/post/${post.id}`}>Read</Link>
+                <Link href={`/site/${site.slug}/post/${post.id}`}>Читать</Link>
                 {post.originalUrl ? (
                   <a href={post.originalUrl} target="_blank" rel="noreferrer">
-                    Open in Telegram
+                    Открыть в Telegram
                   </a>
                 ) : null}
               </div>

@@ -15,7 +15,7 @@ export async function submitChannelRequest(formData) {
   });
 
   if (!result.ok) {
-    redirect(`/add-channel?status=error&message=${encodeURIComponent(result.error || 'Request failed')}`);
+    redirect(`/add-channel?status=error&message=${encodeURIComponent(result.error || 'Заявка не сохранена')}`);
   }
 
   redirect('/add-channel?status=success');

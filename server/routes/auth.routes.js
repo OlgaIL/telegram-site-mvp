@@ -23,6 +23,10 @@ function redirectToFailure(res) {
   return res.redirect(env.authFailureRedirectUrl);
 }
 
+function redirectToFrontendHome(res) {
+  return res.redirect(new URL('/', env.frontendOrigin).toString());
+}
+
 function startOAuth(provider) {
   return (req, res, next) => {
     try {
@@ -66,7 +70,7 @@ function completeOAuth(provider) {
       await startSession(res, user);
 
       logger.info({ provider, userId: user.id }, 'oauth completed');
-      return res.redirect(env.authSuccessRedirectUrl);
+      return redirectToFrontendHome(res);
     } catch (err) {
       logger.error({ err, provider }, 'oauth failed');
       return redirectToFailure(res);

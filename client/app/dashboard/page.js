@@ -4,9 +4,9 @@ export default function DashboardPage() {
   return (
     <main className="page pageNarrow">
       <header className="siteHeader">
-        <p className="eyebrow">Dashboard draft</p>
-        <h1>My account</h1>
-        <p>This is the first auth-protected area. Site settings will be connected here later.</p>
+        <p className="eyebrow">Черновой кабинет</p>
+        <h1>Мой аккаунт</h1>
+        <p>Это первая закрытая область. Позже здесь появятся сайты, заявки и настройки подключения.</p>
       </header>
 
       <DashboardClient />

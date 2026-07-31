@@ -4,10 +4,10 @@ export default function NotFound() {
   return (
     <main className="page pageNarrow">
       <article className="postArticle">
-        <h1>Post not found</h1>
-        <p className="muted">There is no post with this id.</p>
+        <h1>Страница не найдена</h1>
+        <p className="muted">Такой записи нет или она еще не подключена к сайту.</p>
         <p className="backLink">
-          <Link href="/">Back to posts</Link>
+          <Link href="/">Вернуться на главную</Link>
         </p>
       </article>
     </main>

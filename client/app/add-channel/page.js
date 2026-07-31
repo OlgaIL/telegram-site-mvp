@@ -1,7 +1,17 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getMeWithCookie } from '@/lib/api';
 import { submitChannelRequest } from './actions';
 
 export default async function AddChannelPage({ searchParams }) {
+  const cookieStore = await cookies();
+  const account = await getMeWithCookie(cookieStore.toString()).catch(() => null);
+
+  if (!account?.authenticated) {
+    redirect('/login');
+  }
+
   const params = await searchParams;
   const status = params?.status;
   const message = params?.message;
@@ -11,44 +21,43 @@ export default async function AddChannelPage({ searchParams }) {
   return (
     <main className="page pageNarrow">
       <p className="backLink">
-        <Link href="/">Back to search</Link>
+        <Link href="/">Назад к поиску</Link>
       </p>
 
       <header className="siteHeader">
-        <p className="eyebrow">Channel onboarding</p>
-        <h1>Add your Telegram channel</h1>
-        <p>Send a draft request. Later this flow will become registration and channel connection.</p>
+        <p className="eyebrow">Подключение канала</p>
+        <h1>Добавить Telegram-канал</h1>
+        <p>Оставьте заявку. Позже этот сценарий станет полноценным подключением канала в кабинете.</p>
       </header>
 
       <section className="lookupResult">
-        <h2>Bot connection step</h2>
+        <h2>Шаг с ботом</h2>
         <p className="muted">
-          For MVP and future clients we use one service bot. After the request is accepted, add this bot as an admin
-          in your Telegram channel:
+          Для MVP и будущих клиентов мы используем одного сервисного бота. После подтверждения заявки добавьте его
+          админом в Telegram-канал:
         </p>
         <p className="botName">{botUsername}</p>
         <p className="muted">
-          The bot needs access to new channel posts. We will detect the channel by Telegram chat id when the first post
-          arrives.
+          Боту нужен доступ к новым постам канала. Мы определим канал по Telegram chat id, когда придет первый пост.
         </p>
       </section>
 
       {status === 'success' ? (
         <section className="lookupResult lookupResultSuccess">
-          <h2>Request received</h2>
-          <p className="muted">We saved your channel request. This is a draft MVP flow, so no email is sent yet.</p>
+          <h2>Заявка сохранена</h2>
+          <p className="muted">Мы сохранили заявку. В MVP письма пока не отправляются.</p>
         </section>
       ) : null}
 
       {status === 'error' ? (
         <section className="lookupResult lookupResultError">
-          <h2>Request was not saved</h2>
-          <p className="muted">{message || 'Please check the form and try again.'}</p>
+          <h2>Заявка не сохранена</h2>
+          <p className="muted">{message || 'Проверьте форму и попробуйте еще раз.'}</p>
         </section>
       ) : null}
 
       <form className="lookupForm" action={submitChannelRequest}>
-        <label htmlFor="telegramChannel">Telegram channel</label>
+        <label htmlFor="telegramChannel">Telegram-канал</label>
         <input
           id="telegramChannel"
           name="telegramChannel"
@@ -58,24 +67,25 @@ export default async function AddChannelPage({ searchParams }) {
           required
         />
 
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email для связи</label>
         <input
           id="email"
           name="email"
           type="email"
           placeholder="you@example.com"
+          defaultValue={account.user?.email || ''}
           required
         />
 
-        <label htmlFor="comment">Comment</label>
+        <label htmlFor="comment">Комментарий</label>
         <textarea
           id="comment"
           name="comment"
           rows="4"
-          placeholder="Anything useful for setup"
+          placeholder="Что важно знать для подключения"
         />
 
-        <button type="submit">Send request</button>
+        <button type="submit">Отправить заявку</button>
       </form>
     </main>
   );

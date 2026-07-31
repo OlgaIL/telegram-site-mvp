@@ -10,64 +10,71 @@ export default async function HomePage({ searchParams }) {
 
   return (
     <main className="page pageNarrow">
-      <header className="siteHeader">
-        <p className="eyebrow">Telegram to site</p>
-        <h1>Find a Telegram channel site</h1>
-        <p>Enter a Telegram channel username or title. If the channel is connected, we will open its public site.</p>
-      </header>
+      <section className="lookupResult heroPanel">
+        <p className="eyebrow">Поиск зеркала</p>
+        <h1>Найти зеркало телеграмм канала</h1>
+        <p className="muted">
+          Введите username или название канала. Если канал уже подключен, мы откроем его публичную страницу.
+        </p>
 
-      <form className="lookupForm" action="/" method="get">
-        <label htmlFor="channel">Telegram channel</label>
-        <div className="lookupRow">
-          <input
-            id="channel"
-            name="channel"
-            type="text"
-            placeholder="@test_site_tele"
-            defaultValue={query}
-          />
-          <button type="submit">Find</button>
-        </div>
-      </form>
+        <form className="lookupForm lookupFormInline" action="/" method="get">
+          <label htmlFor="channel">Название канала</label>
+          <div className="lookupRow">
+            <input
+              id="channel"
+              name="channel"
+              type="text"
+              placeholder="@test_site_tele"
+              defaultValue={query}
+            />
+            <button type="submit">Найти</button>
+          </div>
+        </form>
+      </section>
 
       {result?.found ? (
         <section className="lookupResult lookupResultSuccess">
           <h2>{result.site.title || result.site.name}</h2>
           <p className="muted">
-            Channel found: @{result.site.channel?.username || 'unknown'}
+            Канал найден: @{result.site.channel?.username || 'unknown'}
           </p>
           <p>
-            <Link href={result.url}>Open channel site</Link>
+            <Link href={result.url}>Открыть сайт канала</Link>
           </p>
         </section>
       ) : null}
 
       {result && !result.found ? (
         <section className="lookupResult">
-          <h2>Channel is not connected yet</h2>
-          <p className="muted">This channel is not added to our system yet.</p>
+          <h2>Канал пока не подключен</h2>
+          <p className="muted">Такого канала еще нет в нашей системе.</p>
           <p>
-            <Link href={`/add-channel${query ? `?channel=${encodeURIComponent(query)}` : ''}`}>Add your channel</Link>
+            <Link href={`/add-channel${query ? `?channel=${encodeURIComponent(query)}` : ''}`}>
+              Добавить канал
+            </Link>
           </p>
         </section>
       ) : null}
 
       {!result ? (
         <section className="lookupResult">
-          <h2>Try the demo</h2>
-          <p className="muted">Use the connected test channel to see the current MVP site.</p>
+          <h2>Посмотреть демо</h2>
+          <p className="muted">Откройте тестовый сайт, который уже получает посты из Telegram.</p>
           <p>
-            <Link href="/site/default">Open demo site</Link>
+            <Link href="/site/default">Открыть демо-сайт</Link>
           </p>
         </section>
       ) : null}
 
       <section className="lookupResult">
-        <h2>Want to connect a channel?</h2>
-        <p className="muted">Leave a draft request first. The bot connection step comes after we confirm the channel.</p>
+        <p className="eyebrow">Подключение</p>
+        <h2>Пишите в Telegram - и новостная лента вашего сайта обновляется сама.</h2>
+        <p className="muted">
+          Хотите подключить свой канал? Оставьте заявку, а дальше мы проведем вас через подключение бота.
+        </p>
         <p>
           <Link href={`/add-channel${query ? `?channel=${encodeURIComponent(query)}` : ''}`}>
-            Add your channel
+            Добавить канал
           </Link>
         </p>
       </section>

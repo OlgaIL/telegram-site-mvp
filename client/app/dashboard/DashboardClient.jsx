@@ -32,7 +32,7 @@ export default function DashboardClient() {
             loading: false,
             authenticated: false,
             user: null,
-            error: 'Could not load account.',
+            error: 'Не удалось загрузить аккаунт.',
           });
         }
       }
@@ -47,20 +47,20 @@ export default function DashboardClient() {
 
   async function handleLogout() {
     await logout();
-    window.location.href = '/login';
+    window.location.href = '/';
   }
 
   if (state.loading) {
-    return <p className="muted">Loading account...</p>;
+    return <p className="muted">Загружаем аккаунт...</p>;
   }
 
   if (!state.authenticated) {
     return (
       <section className="lookupResult">
-        <h2>You are not signed in</h2>
-        <p className="muted">{state.error || 'Sign in to open the dashboard.'}</p>
+        <h2>Вы не вошли</h2>
+        <p className="muted">{state.error || 'Войдите, чтобы открыть кабинет.'}</p>
         <p>
-          <a href="/login">Go to login</a>
+          <a href="/login">Перейти ко входу</a>
         </p>
       </section>
     );
@@ -68,11 +68,11 @@ export default function DashboardClient() {
 
   return (
     <section className="lookupResult">
-      <h2>{state.user?.name || state.user?.email || 'Account'}</h2>
+      <h2>{state.user?.name || state.user?.email || 'Аккаунт'}</h2>
       {state.user?.email ? <p className="muted">{state.user.email}</p> : null}
-      <p className="muted">Dashboard draft. Site ownership and settings will be added next.</p>
+      <p className="muted">Черновой кабинет. Следующим шагом добавим связь пользователя с сайтами и заявками.</p>
       <button className="plainButton" type="button" onClick={handleLogout}>
-        Logout
+        Выйти
       </button>
     </section>
   );

@@ -19,11 +19,11 @@ export default async function SitePage({ params }) {
   return (
     <main className="page">
       <p className="backLink">
-        <Link href="/">Find another channel</Link>
+        <Link href="/">Найти другой канал</Link>
       </p>
 
       <header className="siteHeader">
-        <p className="eyebrow">Telegram-powered site</p>
+        <p className="eyebrow">Сайт из Telegram-канала</p>
         <h1>{site.title || site.name}</h1>
         {site.description ? <p>{site.description}</p> : null}
       </header>

@@ -7,6 +7,7 @@
 - Add retry strategy for failed media downloads.
 - Decide how to clean old local media files.
 - Add real host-based site resolution after DNS/VPS setup.
+- Decide frontend CSS structure: keep global CSS, move to CSS Modules, or refactor class naming to BEM.
 
 ## Product Architecture
 
