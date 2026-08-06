@@ -12,6 +12,7 @@ const { presentUser } = require('../presenters/user.presenter');
 const {
   createChannelRequest,
   findLatestChannelRequests,
+  findLatestChannelRequestsByUserId,
 } = require('../repositories/channel-requests.repository');
 const { findSiteByChannelQuery } = require('../repositories/sites.repository');
 const { resolveSiteBySlug } = require('../services/site-resolver.service');
@@ -116,9 +117,14 @@ apiRouter.get('/channels/lookup', async (req, res, next) => {
 
 apiRouter.post('/channel-requests', async (req, res, next) => {
   try {
+    const user = await getCurrentUser(req);
     const telegramChannel = String(req.body.telegramChannel || '').trim();
     const email = String(req.body.email || '').trim();
     const comment = String(req.body.comment || '').trim();
+
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
 
     if (!telegramChannel) {
       return res.status(400).json({ error: 'Telegram channel is required' });
@@ -132,6 +138,7 @@ apiRouter.post('/channel-requests', async (req, res, next) => {
       telegramChannel,
       email,
       comment,
+      userId: user.id,
     });
 
     return res.status(201).json({
@@ -140,6 +147,30 @@ apiRouter.post('/channel-requests', async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+});
+
+apiRouter.get('/me/channel-requests', async (req, res, next) => {
+  try {
+    const user = await getCurrentUser(req);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const requests = await findLatestChannelRequestsByUserId({
+      userId: user.id,
+      limit: 20,
+    });
+
+    return res.json({
+      items: requests.map(presentChannelRequest),
+      meta: {
+        count: requests.length,
+      },
+    });
+  } catch (err) {
+    return next(err);
   }
 });
 

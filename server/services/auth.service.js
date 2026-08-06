@@ -21,8 +21,8 @@ function isProduction() {
   return env.nodeEnv === 'production';
 }
 
-function createStateCookie(state) {
-  return serializeCookie(STATE_COOKIE_NAME, state, {
+function createStateCookie(state, returnTo) {
+  return serializeCookie(STATE_COOKIE_NAME, JSON.stringify({ state, returnTo }), {
     httpOnly: true,
     maxAge: 10 * 60,
     sameSite: 'Lax',
@@ -51,7 +51,21 @@ function appendSetCookie(res, cookie) {
 }
 
 function readStateCookie(req) {
-  return parseCookies(req.headers.cookie)[STATE_COOKIE_NAME] || '';
+  const value = parseCookies(req.headers.cookie)[STATE_COOKIE_NAME];
+
+  if (!value) {
+    return { state: '', returnTo: '' };
+  }
+
+  try {
+    const payload = JSON.parse(value);
+    return {
+      state: String(payload.state || ''),
+      returnTo: String(payload.returnTo || ''),
+    };
+  } catch {
+    return { state: '', returnTo: '' };
+  }
 }
 
 async function startSession(res, user) {

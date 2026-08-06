@@ -7,6 +7,8 @@ function joinUrl(baseUrl, path) {
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;
   const error = params?.error;
+  const returnTo = typeof params?.returnTo === 'string' ? params.returnTo : '/dashboard';
+  const oauthReturnTo = encodeURIComponent(returnTo);
 
   return (
     <main className="page pageNarrow authPage">
@@ -20,10 +22,10 @@ export default async function LoginPage({ searchParams }) {
       <section className="authPanel">
         <p className="authPrompt">Выберите удобный способ входа</p>
         <div className="authActions">
-          <a className="authButton" href={joinUrl(API_BASE_URL, '/auth/google')}>
+          <a className="authButton" href={joinUrl(API_BASE_URL, `/auth/google?returnTo=${oauthReturnTo}`)}>
             Войти через Google
           </a>
-          <a className="authButton" href={joinUrl(API_BASE_URL, '/auth/yandex')}>
+          <a className="authButton" href={joinUrl(API_BASE_URL, `/auth/yandex?returnTo=${oauthReturnTo}`)}>
             Войти через Яндекс
           </a>
         </div>

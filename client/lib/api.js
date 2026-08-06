@@ -53,11 +53,12 @@ export async function getSitePost(slug, id) {
   return fetchJson(`/api/sites/${encodeURIComponent(slug)}/posts/${encodeURIComponent(id)}`);
 }
 
-export async function createChannelRequest({ telegramChannel, email, comment }) {
+export async function createChannelRequest({ telegramChannel, email, comment, cookieHeader = '' }) {
   const response = await fetch(joinUrl(API_BASE_URL, '/api/channel-requests'), {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
+      ...(cookieHeader ? { cookie: cookieHeader } : {}),
     },
     body: JSON.stringify({
       telegramChannel,
@@ -65,6 +66,7 @@ export async function createChannelRequest({ telegramChannel, email, comment }) 
       comment,
     }),
     cache: 'no-store',
+    credentials: 'include',
   });
 
   const payload = await response.json().catch(() => ({}));
@@ -81,6 +83,19 @@ export async function createChannelRequest({ telegramChannel, email, comment }) 
 
 export async function getChannelRequests() {
   return fetchJson('/api/channel-requests');
+}
+
+export async function getMyChannelRequests() {
+  const response = await fetch(joinUrl(API_BASE_URL, '/api/me/channel-requests'), {
+    cache: 'no-store',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 export async function getMe() {

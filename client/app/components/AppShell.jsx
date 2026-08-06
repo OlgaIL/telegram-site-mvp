@@ -47,7 +47,7 @@ export default function AppShell({ children }) {
     window.location.href = '/';
   }
 
-  const addChannelHref = account.authenticated ? '/add-channel' : '/login';
+  const addChannelHref = account.authenticated ? '/add-channel' : '/login?returnTo=%2Fadd-channel';
   const displayName = account.user?.name || account.user?.email || 'Аккаунт';
   const isLoginPage = pathname === '/login';
 

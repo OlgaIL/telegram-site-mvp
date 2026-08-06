@@ -19,42 +19,57 @@ const {
 
 const authRouter = express.Router();
 
-function redirectToFailure(res) {
-  return res.redirect(env.authFailureRedirectUrl);
+function normalizeReturnTo(value) {
+  const returnTo = String(value || '');
+
+  if (!returnTo.startsWith('/') || returnTo.startsWith('//') || returnTo.includes('\\')) {
+    return '/dashboard';
+  }
+
+  return returnTo;
 }
 
-function redirectToFrontendHome(res) {
-  return res.redirect(new URL('/', env.frontendOrigin).toString());
+function redirectToFailure(res, returnTo) {
+  const url = new URL(env.authFailureRedirectUrl);
+  url.searchParams.set('returnTo', normalizeReturnTo(returnTo));
+  return res.redirect(url.toString());
+}
+
+function redirectToFrontend(res, returnTo) {
+  return res.redirect(new URL(normalizeReturnTo(returnTo), env.frontendOrigin).toString());
 }
 
 function startOAuth(provider) {
   return (req, res, next) => {
     try {
       const state = createRandomToken();
+      const returnTo = normalizeReturnTo(req.query.returnTo);
       const authorizationUrl = buildAuthorizationUrl(provider, state);
 
-      res.setHeader('Set-Cookie', createStateCookie(state));
+      res.setHeader('Set-Cookie', createStateCookie(state, returnTo));
       logger.info({ provider }, 'oauth started');
       return res.redirect(authorizationUrl);
     } catch (err) {
       logger.error({ err, provider }, 'oauth start failed');
-      return redirectToFailure(res);
+      return redirectToFailure(res, req.query.returnTo);
     }
   };
 }
 
 function completeOAuth(provider) {
   return async (req, res, next) => {
+    let oauthState = { state: '', returnTo: '' };
+
     try {
       const code = String(req.query.code || '');
       const state = String(req.query.state || '');
-      const expectedState = readStateCookie(req);
+      oauthState = readStateCookie(req);
 
       res.setHeader('Set-Cookie', clearStateCookie());
 
-      if (!code || !state || !expectedState || state !== expectedState) {
+      if (!code || !state || !oauthState.state || state !== oauthState.state) {
         logger.warn({ provider }, 'oauth state validation failed');
-        return redirectToFailure(res);
+        return redirectToFailure(res, oauthState.returnTo);
       }
 
       const token = await exchangeCodeForToken(provider, code);
@@ -63,17 +78,17 @@ function completeOAuth(provider) {
 
       if (!profile.providerAccountId) {
         logger.warn({ provider }, 'oauth profile missing provider account id');
-        return redirectToFailure(res);
+        return redirectToFailure(res, oauthState.returnTo);
       }
 
       const user = await upsertOAuthUser(profile);
       await startSession(res, user);
 
       logger.info({ provider, userId: user.id }, 'oauth completed');
-      return redirectToFrontendHome(res);
+      return redirectToFrontend(res, oauthState.returnTo);
     } catch (err) {
       logger.error({ err, provider }, 'oauth failed');
-      return redirectToFailure(res);
+      return redirectToFailure(res, oauthState?.returnTo);
     }
   };
 }

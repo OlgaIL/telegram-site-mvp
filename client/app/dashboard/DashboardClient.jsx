@@ -1,28 +1,58 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getMe, logout } from '@/lib/api';
+import { formatDate } from '@/lib/format';
+import { getMe, getMyChannelRequests, logout } from '@/lib/api';
+
+function requestStatusLabel(status) {
+  const labels = {
+    new: 'На рассмотрении',
+    sent: 'Отправлена',
+    in_progress: 'В работе',
+    done: 'Подключена',
+    rejected: 'Не подключена',
+  };
+
+  return labels[status] || status || 'На рассмотрении';
+}
 
 export default function DashboardClient() {
   const [state, setState] = useState({
     loading: true,
     authenticated: false,
     user: null,
+    requests: [],
     error: '',
   });
 
   useEffect(() => {
     let active = true;
 
-    async function loadUser() {
+    async function loadDashboard() {
       try {
-        const data = await getMe();
+        const account = await getMe();
+
+        if (!account.authenticated) {
+          if (active) {
+            setState({
+              loading: false,
+              authenticated: false,
+              user: null,
+              requests: [],
+              error: '',
+            });
+          }
+          return;
+        }
+
+        const requests = await getMyChannelRequests();
 
         if (active) {
           setState({
             loading: false,
-            authenticated: data.authenticated,
-            user: data.user,
+            authenticated: true,
+            user: account.user,
+            requests: requests.items || [],
             error: '',
           });
         }
@@ -32,13 +62,14 @@ export default function DashboardClient() {
             loading: false,
             authenticated: false,
             user: null,
-            error: 'Не удалось загрузить аккаунт.',
+            requests: [],
+            error: 'Не удалось загрузить кабинет.',
           });
         }
       }
     }
 
-    loadUser();
+    loadDashboard();
 
     return () => {
       active = false;
@@ -51,7 +82,7 @@ export default function DashboardClient() {
   }
 
   if (state.loading) {
-    return <p className="muted">Загружаем аккаунт...</p>;
+    return <p className="muted">Загружаем кабинет...</p>;
   }
 
   if (!state.authenticated) {
@@ -67,13 +98,41 @@ export default function DashboardClient() {
   }
 
   return (
-    <section className="lookupResult">
-      <h2>{state.user?.name || state.user?.email || 'Аккаунт'}</h2>
-      {state.user?.email ? <p className="muted">{state.user.email}</p> : null}
-      <p className="muted">Черновой кабинет. Следующим шагом добавим связь пользователя с сайтами и заявками.</p>
-      <button className="plainButton" type="button" onClick={handleLogout}>
-        Выйти
-      </button>
-    </section>
+    <div className="dashboardStack">
+      <section className="lookupResult">
+        <h2>{state.user?.name || state.user?.email || 'Аккаунт'}</h2>
+        {state.user?.email ? <p className="muted">{state.user.email}</p> : null}
+        <p className="muted">Бесплатный тариф</p>
+        <button className="plainButton" type="button" onClick={handleLogout}>
+          Выйти
+        </button>
+      </section>
+
+      <section className="lookupResult">
+        <div className="sectionHeaderRow">
+          <div>
+            <h2>Мои заявки</h2>
+            <p className="muted">Здесь виден статус подключения Telegram-канала.</p>
+          </div>
+          <a href="/add-channel">Добавить канал</a>
+        </div>
+
+        {state.requests.length === 0 ? (
+          <p className="muted">Заявок пока нет.</p>
+        ) : (
+          <div className="requestList">
+            {state.requests.map((request) => (
+              <article className="requestItem" key={request.id}>
+                <div>
+                  <h3>{request.telegramChannel}</h3>
+                  <p className="muted">Отправлена: {formatDate(request.createdAt)}</p>
+                </div>
+                <span className="statusBadge">{requestStatusLabel(request.status)}</span>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
   );
 }

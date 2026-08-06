@@ -9,7 +9,10 @@ export default async function AddChannelPage({ searchParams }) {
   const account = await getMeWithCookie(cookieStore.toString()).catch(() => null);
 
   if (!account?.authenticated) {
-    redirect('/login');
+    const params = await searchParams;
+    const channel = String(params?.channel || '').trim();
+    const returnTo = channel ? `/add-channel?channel=${encodeURIComponent(channel)}` : '/add-channel';
+    redirect(`/login?returnTo=${encodeURIComponent(returnTo)}`);
   }
 
   const params = await searchParams;

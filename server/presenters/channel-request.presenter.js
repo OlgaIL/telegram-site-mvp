@@ -1,6 +1,7 @@
 function presentChannelRequest(row) {
   return {
     id: row.id,
+    userId: row.user_id,
     telegramChannel: row.telegram_channel,
     email: row.email,
     comment: row.comment,
