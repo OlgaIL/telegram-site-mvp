@@ -12,6 +12,8 @@ const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT || 3000),
   databaseUrl: process.env.DATABASE_URL || '',
+  databaseSslCaFile: process.env.DATABASE_SSL_CA_FILE || '',
+  databaseSslServername: process.env.DATABASE_SSL_SERVERNAME || '',
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
   telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET || '',
   telegramProxyUrl: process.env.TELEGRAM_PROXY_URL || '',

@@ -57,7 +57,10 @@ Required backend values:
 ```env
 NODE_ENV=production
 PORT=3100
-DATABASE_URL=<separate production database URL>
+PGPASSWORD=<database user password>
+DATABASE_URL=postgresql://tg4you_app@<database public IP>:5432/tg4you
+DATABASE_SSL_CA_FILE=/var/www/tg4you.ru/shared/certs/timeweb-ca.crt
+DATABASE_SSL_SERVERNAME=<Timeweb technical database hostname>
 PUBLIC_BASE_URL=https://tg4you.ru
 FRONTEND_ORIGIN=https://tg4you.ru
 AUTH_FAILURE_REDIRECT_URL=https://tg4you.ru/login?error=oauth_failed
