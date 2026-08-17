@@ -1,5 +1,10 @@
-const API_BASE_URL =
+const PUBLIC_API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL || 'http://localhost:3000';
+const SERVER_API_BASE_URL = process.env.API_BASE_URL || PUBLIC_API_BASE_URL;
+
+function getApiBaseUrl() {
+  return typeof window === 'undefined' ? SERVER_API_BASE_URL : PUBLIC_API_BASE_URL;
+}
 
 function joinUrl(baseUrl, path) {
   return `${baseUrl.replace(/\/$/, '')}${path}`;
@@ -14,11 +19,11 @@ export function absoluteMediaUrl(url) {
     return url;
   }
 
-  return joinUrl(API_BASE_URL, url.startsWith('/') ? url : `/${url}`);
+  return joinUrl(PUBLIC_API_BASE_URL, url.startsWith('/') ? url : `/${url}`);
 }
 
 async function fetchJson(path) {
-  const response = await fetch(joinUrl(API_BASE_URL, path), {
+  const response = await fetch(joinUrl(getApiBaseUrl(), path), {
     cache: 'no-store',
   });
 
@@ -58,7 +63,7 @@ export async function getSitePost(slug, id) {
 }
 
 export async function createChannelRequest({ telegramChannel, email, comment, cookieHeader = '' }) {
-  const response = await fetch(joinUrl(API_BASE_URL, '/api/channel-requests'), {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/channel-requests'), {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -90,7 +95,7 @@ export async function getChannelRequests() {
 }
 
 export async function getMyChannelRequests() {
-  const response = await fetch(joinUrl(API_BASE_URL, '/api/me/channel-requests'), {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/me/channel-requests'), {
     cache: 'no-store',
     credentials: 'include',
   });
@@ -103,7 +108,7 @@ export async function getMyChannelRequests() {
 }
 
 export async function getMe() {
-  const response = await fetch(joinUrl(API_BASE_URL, '/api/me'), {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/me'), {
     cache: 'no-store',
     credentials: 'include',
   });
@@ -116,7 +121,7 @@ export async function getMe() {
 }
 
 export async function getMeWithCookie(cookieHeader = '') {
-  const response = await fetch(joinUrl(API_BASE_URL, '/api/me'), {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/me'), {
     cache: 'no-store',
     headers: cookieHeader ? { cookie: cookieHeader } : {},
   });
@@ -129,7 +134,7 @@ export async function getMeWithCookie(cookieHeader = '') {
 }
 
 export async function logout() {
-  const response = await fetch(joinUrl(API_BASE_URL, '/auth/logout'), {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/auth/logout'), {
     method: 'POST',
     credentials: 'include',
   });

@@ -3,6 +3,7 @@ node_modules/
 .env
 .env.local
 client/.env.local
+client/.env.production
 
 .next/
 client/.next/
