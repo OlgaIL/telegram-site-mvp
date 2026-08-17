@@ -12,6 +12,7 @@ const {
 } = require('../services/auth.service');
 const {
   buildAuthorizationUrl,
+  createVkPkce,
   exchangeCodeForToken,
   fetchUserInfo,
   normalizeProviderProfile,
@@ -44,9 +45,10 @@ function startOAuth(provider) {
     try {
       const state = createRandomToken();
       const returnTo = normalizeReturnTo(req.query.returnTo);
-      const authorizationUrl = buildAuthorizationUrl(provider, state);
+      const context = provider === 'vk' ? createVkPkce() : {};
+      const authorizationUrl = buildAuthorizationUrl(provider, state, context);
 
-      res.setHeader('Set-Cookie', createStateCookie(state, returnTo));
+      res.setHeader('Set-Cookie', createStateCookie(state, returnTo, context));
       logger.info({ provider }, 'oauth started');
       return res.redirect(authorizationUrl);
     } catch (err) {
@@ -63,6 +65,7 @@ function completeOAuth(provider) {
     try {
       const code = String(req.query.code || '');
       const state = String(req.query.state || '');
+      const deviceId = String(req.query.device_id || '');
       oauthState = readStateCookie(req);
 
       res.setHeader('Set-Cookie', clearStateCookie());
@@ -72,8 +75,11 @@ function completeOAuth(provider) {
         return redirectToFailure(res, oauthState.returnTo);
       }
 
-      const token = await exchangeCodeForToken(provider, code);
-      const rawProfile = await fetchUserInfo(provider, token.access_token);
+      const token = await exchangeCodeForToken(provider, code, {
+        codeVerifier: oauthState.codeVerifier,
+        deviceId,
+      });
+      const rawProfile = await fetchUserInfo(provider, token);
       const profile = normalizeProviderProfile(provider, rawProfile);
 
       if (!profile.providerAccountId) {
@@ -97,6 +103,8 @@ authRouter.get('/yandex', startOAuth('yandex'));
 authRouter.get('/yandex/callback', completeOAuth('yandex'));
 authRouter.get('/google', startOAuth('google'));
 authRouter.get('/google/callback', completeOAuth('google'));
+authRouter.get('/vk', startOAuth('vk'));
+authRouter.get('/vk/callback', completeOAuth('vk'));
 
 authRouter.post('/logout', async (req, res, next) => {
   try {

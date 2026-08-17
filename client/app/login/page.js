@@ -1,3 +1,5 @@
+import { getAuthProviders } from '@/lib/api';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
 
 function joinUrl(baseUrl, path) {
@@ -9,6 +11,7 @@ export default async function LoginPage({ searchParams }) {
   const error = params?.error;
   const returnTo = typeof params?.returnTo === 'string' ? params.returnTo : '/dashboard';
   const oauthReturnTo = encodeURIComponent(returnTo);
+  const providers = await getAuthProviders().catch(() => ({ items: [] }));
 
   return (
     <main className="page pageNarrow authPage">
@@ -22,12 +25,15 @@ export default async function LoginPage({ searchParams }) {
       <section className="authPanel">
         <p className="authPrompt">Выберите удобный способ входа</p>
         <div className="authActions">
-          <a className="authButton" href={joinUrl(API_BASE_URL, `/auth/google?returnTo=${oauthReturnTo}`)}>
-            Войти через Google
-          </a>
-          <a className="authButton" href={joinUrl(API_BASE_URL, `/auth/yandex?returnTo=${oauthReturnTo}`)}>
-            Войти через Яндекс
-          </a>
+          {providers.items.map((provider) => (
+            <a
+              className="authButton"
+              href={joinUrl(API_BASE_URL, `/auth/${provider.id}?returnTo=${oauthReturnTo}`)}
+              key={provider.id}
+            >
+              Войти через {provider.label}
+            </a>
+          ))}
         </div>
       </section>
     </main>

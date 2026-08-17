@@ -4,6 +4,20 @@ Read-only endpoints for posts.
 
 Auth endpoints use httpOnly session cookies.
 
+## GET /api/auth-providers
+
+Returns only the OAuth providers enabled and configured on the server.
+
+```json
+{
+  "items": [
+    { "id": "google", "label": "Google" },
+    { "id": "yandex", "label": "Яндекс" },
+    { "id": "vk", "label": "VK" }
+  ]
+}
+```
+
 ## GET /api/me
 
 Returns the current authenticated user.
@@ -45,6 +59,14 @@ Starts Google OAuth. Requires Google OAuth env values before live use.
 ## GET /auth/google/callback
 
 Completes Google OAuth, creates/updates local user, starts a session, and redirects to the frontend dashboard.
+
+## GET /auth/vk
+
+Starts VK OAuth. Available only when `VK_AUTH_ENABLED=true` and all VK variables are configured.
+
+## GET /auth/vk/callback
+
+Completes VK OAuth, creates/updates local user, starts a session, and redirects to the requested frontend page.
 
 ## POST /auth/logout
 

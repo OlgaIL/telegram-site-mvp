@@ -21,8 +21,8 @@ function isProduction() {
   return env.nodeEnv === 'production';
 }
 
-function createStateCookie(state, returnTo) {
-  return serializeCookie(STATE_COOKIE_NAME, JSON.stringify({ state, returnTo }), {
+function createStateCookie(state, returnTo, context = {}) {
+  return serializeCookie(STATE_COOKIE_NAME, JSON.stringify({ state, returnTo, ...context }), {
     httpOnly: true,
     maxAge: 10 * 60,
     sameSite: 'Lax',
@@ -62,6 +62,7 @@ function readStateCookie(req) {
     return {
       state: String(payload.state || ''),
       returnTo: String(payload.returnTo || ''),
+      codeVerifier: String(payload.codeVerifier || ''),
     };
   } catch {
     return { state: '', returnTo: '' };

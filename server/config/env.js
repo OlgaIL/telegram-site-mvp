@@ -1,5 +1,13 @@
 require('dotenv').config();
 
+function readBoolean(value, defaultValue) {
+  if (value === undefined || value === '') {
+    return defaultValue;
+  }
+
+  return ['1', 'true', 'yes', 'on'].includes(String(value).toLowerCase());
+}
+
 const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT || 3000),
@@ -12,14 +20,20 @@ const env = {
   authFailureRedirectUrl: process.env.AUTH_FAILURE_REDIRECT_URL || 'http://localhost:3001/login?error=oauth_failed',
   sessionCookieName: process.env.SESSION_COOKIE_NAME || 'telegram_site_session',
   sessionTtlDays: Number(process.env.SESSION_TTL_DAYS || 30),
+  yandexAuthEnabled: readBoolean(process.env.YANDEX_AUTH_ENABLED, true),
   yandexClientId: process.env.YANDEX_CLIENT_ID || '',
   yandexClientSecret: process.env.YANDEX_CLIENT_SECRET || '',
   yandexCallbackUrl:
     process.env.YANDEX_CALLBACK_URL || 'http://localhost:3000/auth/yandex/callback',
+  googleAuthEnabled: readBoolean(process.env.GOOGLE_AUTH_ENABLED, true),
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   googleCallbackUrl:
     process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/auth/google/callback',
+  vkAuthEnabled: readBoolean(process.env.VK_AUTH_ENABLED, false),
+  vkClientId: process.env.VK_CLIENT_ID || '',
+  vkClientSecret: process.env.VK_CLIENT_SECRET || '',
+  vkCallbackUrl: process.env.VK_CALLBACK_URL || 'http://localhost:3000/auth/vk/callback',
   uploadsDir: process.env.UPLOADS_DIR || 'uploads/telegram',
 };
 

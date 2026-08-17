@@ -41,6 +41,10 @@ export async function getPost(id) {
   return fetchJson(`/api/posts/${id}`);
 }
 
+export async function getAuthProviders() {
+  return fetchJson('/api/auth-providers');
+}
+
 export async function lookupChannel(query) {
   return fetchJson(`/api/channels/lookup?query=${encodeURIComponent(query)}`);
 }

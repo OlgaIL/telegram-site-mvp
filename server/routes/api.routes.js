@@ -17,8 +17,13 @@ const {
 const { findSiteByChannelQuery } = require('../repositories/sites.repository');
 const { resolveSiteBySlug } = require('../services/site-resolver.service');
 const { getCurrentUser } = require('../services/auth.service');
+const { getAvailableProviders } = require('../services/oauth.service');
 
 const apiRouter = express.Router();
+
+apiRouter.get('/auth-providers', (req, res) => {
+  return res.json({ items: getAvailableProviders() });
+});
 
 function parseLimit(value) {
   const limit = Number(value || 20);
