@@ -1,11 +1,25 @@
 import Link from 'next/link';
-import { getChannelRequests } from '@/lib/api';
+import { cookies } from 'next/headers';
+import { notFound, redirect } from 'next/navigation';
+import { getChannelRequests, getMeWithCookie } from '@/lib/api';
 import { formatDate } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ChannelRequestsAdminPage() {
-  const data = await getChannelRequests();
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+  const account = await getMeWithCookie(cookieHeader).catch(() => null);
+
+  if (!account?.authenticated) {
+    redirect('/login?returnTo=%2Fadmin%2Fchannel-requests');
+  }
+
+  if (!account.user?.isAdmin) {
+    notFound();
+  }
+
+  const data = await getChannelRequests(cookieHeader);
   const requests = data?.items || [];
 
   return (

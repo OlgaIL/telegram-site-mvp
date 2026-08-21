@@ -16,7 +16,7 @@ const {
 } = require('../repositories/channel-requests.repository');
 const { findSiteByChannelQuery } = require('../repositories/sites.repository');
 const { resolveSiteBySlug } = require('../services/site-resolver.service');
-const { getCurrentUser } = require('../services/auth.service');
+const { getCurrentUser, isAdminUser } = require('../services/auth.service');
 const { getAvailableProviders } = require('../services/oauth.service');
 
 const apiRouter = express.Router();
@@ -66,7 +66,7 @@ apiRouter.get('/me', async (req, res, next) => {
 
     return res.json({
       authenticated: Boolean(user),
-      user: user ? presentUser(user) : null,
+      user: user ? { ...presentUser(user), isAdmin: isAdminUser(user) } : null,
     });
   } catch (err) {
     return next(err);
@@ -181,6 +181,16 @@ apiRouter.get('/me/channel-requests', async (req, res, next) => {
 
 apiRouter.get('/channel-requests', async (req, res, next) => {
   try {
+    const user = await getCurrentUser(req);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    if (!isAdminUser(user)) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
     const requests = await findLatestChannelRequests({ limit: 50 });
 
     return res.json({

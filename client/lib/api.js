@@ -90,8 +90,17 @@ export async function createChannelRequest({ telegramChannel, email, comment, co
   return payload;
 }
 
-export async function getChannelRequests() {
-  return fetchJson('/api/channel-requests');
+export async function getChannelRequests(cookieHeader = '') {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/channel-requests'), {
+    cache: 'no-store',
+    headers: cookieHeader ? { cookie: cookieHeader } : {},
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 export async function getMyChannelRequests() {

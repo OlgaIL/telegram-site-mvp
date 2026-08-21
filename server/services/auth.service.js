@@ -21,6 +21,12 @@ function isProduction() {
   return env.nodeEnv === 'production';
 }
 
+function isAdminUser(user) {
+  const email = String(user?.email || '').trim().toLowerCase();
+
+  return Boolean(email && env.adminEmails.includes(email));
+}
+
 function createStateCookie(state, returnTo, context = {}) {
   return serializeCookie(STATE_COOKIE_NAME, JSON.stringify({ state, returnTo, ...context }), {
     httpOnly: true,
@@ -124,6 +130,7 @@ module.exports = {
   createStateCookie,
   endSession,
   getCurrentUser,
+  isAdminUser,
   readStateCookie,
   startSession,
 };
