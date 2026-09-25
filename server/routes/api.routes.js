@@ -21,6 +21,24 @@ const { getAvailableProviders } = require('../services/oauth.service');
 
 const apiRouter = express.Router();
 
+async function requireAdmin(req, res, next) {
+  try {
+    const user = await getCurrentUser(req);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    if (!isAdminUser(user)) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 apiRouter.get('/auth-providers', (req, res) => {
   return res.json({ items: getAvailableProviders() });
 });
@@ -43,7 +61,7 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
 }
 
-apiRouter.get('/posts', async (req, res, next) => {
+apiRouter.get('/posts', requireAdmin, async (req, res, next) => {
   try {
     const limit = parseLimit(req.query.limit);
     const posts = await findLatestPosts({ limit });
@@ -73,7 +91,7 @@ apiRouter.get('/me', async (req, res, next) => {
   }
 });
 
-apiRouter.get('/posts/:id', async (req, res, next) => {
+apiRouter.get('/posts/:id', requireAdmin, async (req, res, next) => {
   try {
     if (!isPositiveIntegerString(req.params.id)) {
       return res.status(400).json({ error: 'Invalid post id' });
@@ -179,18 +197,8 @@ apiRouter.get('/me/channel-requests', async (req, res, next) => {
   }
 });
 
-apiRouter.get('/channel-requests', async (req, res, next) => {
+apiRouter.get('/channel-requests', requireAdmin, async (req, res, next) => {
   try {
-    const user = await getCurrentUser(req);
-
-    if (!user) {
-      return res.status(401).json({ error: 'Authentication required' });
-    }
-
-    if (!isAdminUser(user)) {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-
     const requests = await findLatestChannelRequests({ limit: 50 });
 
     return res.json({

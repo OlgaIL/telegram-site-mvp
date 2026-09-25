@@ -126,6 +126,7 @@ export default function DashboardClient() {
                 <div>
                   <h3>{request.telegramChannel}</h3>
                   <p className="muted">Отправлена: {formatDate(request.createdAt)}</p>
+                  {request.siteUrl ? <a href={request.siteUrl}>Открыть сайт канала</a> : null}
                 </div>
                 <span className="statusBadge">{requestStatusLabel(request.status)}</span>
               </article>

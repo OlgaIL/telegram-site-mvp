@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "db:migrate": "node server/db/migrate.js",
+    "channel:complete": "node scripts/complete-channel-request.js",
     "dev": "concurrently -n server,client -c blue,green \"npm.cmd run dev:api\" \"npm.cmd run dev:client\"",
     "dev:api": "node --watch server/server.js",
     "dev:client": "npm.cmd --prefix client run dev",

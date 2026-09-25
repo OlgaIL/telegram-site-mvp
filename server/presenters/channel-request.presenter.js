@@ -6,6 +6,8 @@ function presentChannelRequest(row) {
     email: row.email,
     comment: row.comment,
     status: row.status,
+    siteSlug: row.site_slug || null,
+    siteUrl: row.site_slug ? `/site/${row.site_slug}` : null,
     createdAt: row.created_at ? row.created_at.toISOString() : null,
   };
 }

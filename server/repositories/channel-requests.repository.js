@@ -24,17 +24,20 @@ async function findLatestChannelRequestsByUserId({ userId, limit = 20 } = {}) {
   const result = await query(
     `
       select
-        id,
-        user_id,
-        telegram_channel,
-        email,
-        comment,
-        status,
-        created_at,
-        updated_at
-      from channel_requests
-      where user_id = $1
-      order by created_at desc, id desc
+        r.id,
+        r.user_id,
+        r.telegram_channel,
+        r.email,
+        r.comment,
+        r.status,
+        r.site_id,
+        s.slug as site_slug,
+        r.created_at,
+        r.updated_at
+      from channel_requests r
+      left join sites s on s.id = r.site_id
+      where r.user_id = $1
+      order by r.created_at desc, r.id desc
       limit $2;
     `,
     [userId, limit],
@@ -47,16 +50,19 @@ async function findLatestChannelRequests({ limit = 50 } = {}) {
   const result = await query(
     `
       select
-        id,
-        user_id,
-        telegram_channel,
-        email,
-        comment,
-        status,
-        created_at,
-        updated_at
-      from channel_requests
-      order by created_at desc, id desc
+        r.id,
+        r.user_id,
+        r.telegram_channel,
+        r.email,
+        r.comment,
+        r.status,
+        r.site_id,
+        s.slug as site_slug,
+        r.created_at,
+        r.updated_at
+      from channel_requests r
+      left join sites s on s.id = r.site_id
+      order by r.created_at desc, r.id desc
       limit $1;
     `,
     [limit],
