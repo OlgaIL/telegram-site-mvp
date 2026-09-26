@@ -78,6 +78,7 @@ Required client values:
 ```env
 API_BASE_URL=http://127.0.0.1:3100
 NEXT_PUBLIC_API_BASE_URL=https://tg4you.ru
+NEXT_PUBLIC_TELEGRAM_BOT_USERNAME=@your_real_bot
 ```
 
 Run the migration and build before starting PM2:

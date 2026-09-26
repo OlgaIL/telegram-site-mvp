@@ -103,10 +103,58 @@ export async function getChannelRequests(cookieHeader = '') {
   return response.json();
 }
 
+export async function getDetectedChannels(cookieHeader = '') {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/admin/detected-channels'), {
+    cache: 'no-store',
+    headers: cookieHeader ? { cookie: cookieHeader } : {},
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function completeChannelRequest({ requestId, channelId, cookieHeader }) {
+  const response = await fetch(
+    joinUrl(getApiBaseUrl(), `/api/channel-requests/${encodeURIComponent(requestId)}/complete`),
+    {
+      method: 'POST',
+      cache: 'no-store',
+      headers: {
+        'content-type': 'application/json',
+        cookie: cookieHeader,
+      },
+      body: JSON.stringify({ channelId }),
+    },
+  );
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    return { ok: false, error: payload.error || 'Не удалось подключить канал.' };
+  }
+
+  return payload;
+}
+
 export async function getMyChannelRequests() {
   const response = await fetch(joinUrl(getApiBaseUrl(), '/api/me/channel-requests'), {
     cache: 'no-store',
     credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function getMyChannelRequestsWithCookie(cookieHeader = '') {
+  const response = await fetch(joinUrl(getApiBaseUrl(), '/api/me/channel-requests'), {
+    cache: 'no-store',
+    headers: cookieHeader ? { cookie: cookieHeader } : {},
   });
 
   if (!response.ok) {

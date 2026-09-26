@@ -21,5 +21,5 @@ export async function submitChannelRequest(formData) {
     redirect(`/add-channel?status=error&message=${encodeURIComponent(result.error || 'Заявка не сохранена')}`);
   }
 
-  redirect('/dashboard?request=created');
+  redirect(`/add-channel/submitted?requestId=${encodeURIComponent(result.request.id)}`);
 }

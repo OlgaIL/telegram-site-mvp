@@ -15,6 +15,11 @@ const {
   findLatestChannelRequestsByUserId,
 } = require('../repositories/channel-requests.repository');
 const { findSiteByChannelQuery } = require('../repositories/sites.repository');
+const { findDetectedChannels } = require('../repositories/channels.repository');
+const {
+  completeChannelRequest,
+  CompletionError,
+} = require('../services/complete-channel-request.service');
 const { resolveSiteBySlug } = require('../services/site-resolver.service');
 const { getCurrentUser, isAdminUser } = require('../services/auth.service');
 const { getAvailableProviders } = require('../services/oauth.service');
@@ -209,6 +214,46 @@ apiRouter.get('/channel-requests', requireAdmin, async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+});
+
+apiRouter.get('/admin/detected-channels', requireAdmin, async (req, res, next) => {
+  try {
+    const channels = await findDetectedChannels();
+
+    return res.json({
+      items: channels.map((channel) => ({
+        id: channel.id,
+        telegramChatId: channel.telegram_chat_id,
+        title: channel.title,
+        username: channel.username,
+        detectedAt: channel.detected_at?.toISOString() || null,
+        siteUrl: channel.site_slug ? `/site/${channel.site_slug}` : null,
+      })),
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+apiRouter.post('/channel-requests/:id/complete', requireAdmin, async (req, res, next) => {
+  try {
+    if (!isPositiveIntegerString(req.params.id) || !isPositiveIntegerString(req.body?.channelId)) {
+      return res.status(400).json({ error: 'Укажите заявку и найденный канал.' });
+    }
+
+    const site = await completeChannelRequest({
+      requestId: req.params.id,
+      channelId: req.body.channelId,
+    });
+
+    return res.json({ ok: true, site });
+  } catch (err) {
+    if (err instanceof CompletionError) {
+      return res.status(err.status).json({ error: err.message });
+    }
+
+    return next(err);
   }
 });
 

@@ -19,7 +19,6 @@ export default async function AddChannelPage({ searchParams }) {
   const status = params?.status;
   const message = params?.message;
   const channel = String(params?.channel || '').trim();
-  const botUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || '@your_service_bot';
 
   return (
     <main className="page pageNarrow">
@@ -30,20 +29,8 @@ export default async function AddChannelPage({ searchParams }) {
       <header className="siteHeader">
         <p className="eyebrow">Подключение канала</p>
         <h1>Добавить Telegram-канал</h1>
-        <p>Оставьте заявку. Позже этот сценарий станет полноценным подключением канала в кабинете.</p>
+        <p>Оставьте заявку. Сразу после отправки покажем, как добавить бота в канал.</p>
       </header>
-
-      <section className="lookupResult">
-        <h2>Шаг с ботом</h2>
-        <p className="muted">
-          Для MVP и будущих клиентов мы используем одного сервисного бота. После подтверждения заявки добавьте его
-          админом в Telegram-канал:
-        </p>
-        <p className="botName">{botUsername}</p>
-        <p className="muted">
-          Боту нужен доступ к новым постам канала. Мы определим канал по Telegram chat id, когда придет первый пост.
-        </p>
-      </section>
 
       {status === 'success' ? (
         <section className="lookupResult lookupResultSuccess">

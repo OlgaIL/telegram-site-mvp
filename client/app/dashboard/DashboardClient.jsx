@@ -124,9 +124,14 @@ export default function DashboardClient() {
             {state.requests.map((request) => (
               <article className="requestItem" key={request.id}>
                 <div>
-                  <h3>{request.telegramChannel}</h3>
+                  <h3>Заявка №{request.id}: {request.telegramChannel}</h3>
                   <p className="muted">Отправлена: {formatDate(request.createdAt)}</p>
                   {request.siteUrl ? <a href={request.siteUrl}>Открыть сайт канала</a> : null}
+                  {!request.siteUrl ? (
+                    <a href={`/add-channel/submitted?requestId=${encodeURIComponent(request.id)}`}>
+                      Как добавить бота
+                    </a>
+                  ) : null}
                 </div>
                 <span className="statusBadge">{requestStatusLabel(request.status)}</span>
               </article>

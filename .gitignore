@@ -7,6 +7,7 @@ client/.env.production
 
 .next/
 client/.next/
+client/.next-p0-verify/
 dist/
 build/
 coverage/

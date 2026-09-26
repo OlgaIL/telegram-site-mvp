@@ -18,4 +18,22 @@ async function upsertChannel({ telegramChatId, username, title }) {
   return result.rows[0];
 }
 
-module.exports = { upsertChannel };
+async function findDetectedChannels() {
+  const result = await query(`
+    select
+      c.id,
+      c.telegram_chat_id,
+      c.username,
+      c.title,
+      c.created_at as detected_at,
+      s.slug as site_slug
+    from channels c
+    left join sites s on s.channel_id = c.id
+    where exists (select 1 from posts p where p.channel_id = c.id)
+    order by c.updated_at desc, c.id desc;
+  `);
+
+  return result.rows;
+}
+
+module.exports = { upsertChannel, findDetectedChannels };
