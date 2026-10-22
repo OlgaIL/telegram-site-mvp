@@ -50,6 +50,33 @@ export async function getAuthProviders() {
   return fetchJson('/api/auth-providers');
 }
 
+async function emailAuthRequest(path, body) {
+  const response = await fetch(joinUrl(getApiBaseUrl(), path), {
+    method: 'POST',
+    credentials: 'include',
+    cache: 'no-store',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(30000),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error('Email login failed');
+    error.code = payload.error;
+    error.retryAfterSeconds = payload.retryAfterSeconds;
+    throw error;
+  }
+  return payload;
+}
+
+export function requestEmailCode(email) {
+  return emailAuthRequest('/auth/email/request', { email });
+}
+
+export function verifyEmailCode({ email, code, returnTo }) {
+  return emailAuthRequest('/auth/email/verify', { email, code, returnTo });
+}
+
 export async function lookupChannel(query) {
   return fetchJson(`/api/channels/lookup?query=${encodeURIComponent(query)}`);
 }

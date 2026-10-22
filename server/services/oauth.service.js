@@ -125,12 +125,13 @@ async function exchangeCodeForToken(provider, code, context = {}) {
   }
 
   if (provider === 'vk') {
-    if (!context.codeVerifier || !context.deviceId) {
+    if (!context.codeVerifier || !context.deviceId || !context.state) {
       throw new Error('VK ID callback is missing PKCE data');
     }
 
     body.set('code_verifier', context.codeVerifier);
     body.set('device_id', context.deviceId);
+    body.set('state', context.state);
   }
 
   const response = await fetch(config.tokenUrl, {
@@ -145,6 +146,10 @@ async function exchangeCodeForToken(provider, code, context = {}) {
 
   if (!response.ok || !payload.access_token) {
     throw new Error(`${provider} token exchange failed`);
+  }
+
+  if (provider === 'vk' && payload.state !== context.state) {
+    throw new Error('VK ID token state validation failed');
   }
 
   return payload;

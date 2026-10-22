@@ -8,6 +8,7 @@ client/.env.production
 .next/
 client/.next/
 client/.next-p0-verify/
+client/.next-email-auth-qa/
 dist/
 build/
 coverage/

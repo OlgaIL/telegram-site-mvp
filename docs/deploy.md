@@ -121,6 +121,11 @@ After HTTPS is working:
 
 ## Update release
 
+Email login adds migration 009. Configure the root .env using [email-auth.md](email-auth.md)
+before enabling EMAIL_AUTH_ENABLED. Until SMTP is configured the email button stays hidden.
+Google, Yandex and VK retain their individual *_AUTH_ENABLED flags.
+The staged email-auth release and rollback steps are in [email-auth-release.md](email-auth-release.md).
+
 ```bash
 cd /var/www/tg4you.ru/app
 git pull

@@ -110,6 +110,8 @@ http://localhost:3001/
 
 ## Environment
 
+Email codes and provider switches: [docs/email-auth.md](docs/email-auth.md).
+
 Backend `.env`:
 
 ```env

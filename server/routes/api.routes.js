@@ -22,7 +22,7 @@ const {
 } = require('../services/complete-channel-request.service');
 const { resolveSiteBySlug } = require('../services/site-resolver.service');
 const { getCurrentUser, isAdminUser } = require('../services/auth.service');
-const { getAvailableProviders } = require('../services/oauth.service');
+const { getAvailableProviders } = require('../services/auth-providers.service');
 
 const apiRouter = express.Router();
 
@@ -45,6 +45,7 @@ async function requireAdmin(req, res, next) {
 }
 
 apiRouter.get('/auth-providers', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   return res.json({ items: getAvailableProviders() });
 });
 
