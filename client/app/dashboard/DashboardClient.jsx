@@ -102,7 +102,7 @@ export default function DashboardClient() {
       <section className="lookupResult">
         <h2>{state.user?.name || state.user?.email || 'Аккаунт'}</h2>
         {state.user?.email ? <p className="muted">{state.user.email}</p> : null}
-        <p className="muted">Бесплатный тариф</p>
+        <p className="muted">Бесплатная бета</p>
         <button className="plainButton" type="button" onClick={handleLogout}>
           Выйти
         </button>

@@ -23,7 +23,7 @@ export default async function AddChannelPage({ searchParams }) {
   return (
     <main className="page pageNarrow">
       <p className="backLink">
-        <Link href="/">Назад к поиску</Link>
+        <Link href="/">На главную</Link>
       </p>
 
       <header className="siteHeader">
@@ -35,7 +35,7 @@ export default async function AddChannelPage({ searchParams }) {
       {status === 'success' ? (
         <section className="lookupResult lookupResultSuccess">
           <h2>Заявка сохранена</h2>
-          <p className="muted">Мы сохранили заявку. В MVP письма пока не отправляются.</p>
+          <p className="muted">Заявка сохранена. Статус подключения доступен в кабинете.</p>
         </section>
       ) : null}
 

@@ -19,7 +19,7 @@ export default async function SitePage({ params }) {
   return (
     <main className="page">
       <p className="backLink">
-        <Link href="/">Найти другой канал</Link>
+        <Link href="/#find">Найти другой канал</Link>
       </p>
 
       <header className="siteHeader">

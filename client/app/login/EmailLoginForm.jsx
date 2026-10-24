@@ -14,7 +14,7 @@ function errorMessage(error) {
   }
 }
 
-export default function EmailLoginForm({ returnTo }) {
+export default function EmailLoginForm({ returnTo, onBusyChange }) {
   const id = useId();
   const [step, setStep] = useState('closed');
   const [email, setEmail] = useState('');
@@ -23,6 +23,11 @@ export default function EmailLoginForm({ returnTo }) {
   const [error, setError] = useState('');
   const [resendAt, setResendAt] = useState(0);
   const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    onBusyChange?.(pending);
+    return () => onBusyChange?.(false);
+  }, [pending, onBusyChange]);
 
   useEffect(() => {
     if (!resendAt) return undefined;
@@ -133,6 +138,7 @@ export default function EmailLoginForm({ returnTo }) {
           </button>
         </>
       )}
+      <button className="linkButton" type="button" disabled={pending} onClick={() => { setStep('closed'); setError(''); }}>Другой способ входа</button>
       {error ? <p className="emailLoginError" role="alert">{error}</p> : null}
     </form>
   );

@@ -6,7 +6,7 @@ export default function DashboardPage() {
       <header className="siteHeader">
         <p className="eyebrow">Кабинет</p>
         <h1>Мой аккаунт</h1>
-        <p>Здесь будут заявки, подключенные сайты и настройки публикации.</p>
+        <p>Ваши заявки и ссылки на подключённые сайты.</p>
       </header>
 
       <DashboardClient />

@@ -3,18 +3,18 @@
 }
 
 :root {
-  --bg: #f5f7fa;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-soft: #eef4f8;
-  --text: #17202a;
-  --muted: #647382;
+  --surface-soft: #f8f9fa;
+  --text: #202124;
+  --muted: #5f6368;
   --border: #d9e0e8;
-  --primary: #1368b3;
+  --primary: #1967d2;
   --primary-dark: #0f4f87;
-  --accent: #2f8f6b;
+  --accent: #5f6368;
   --danger: #a94747;
   --warning: #b28b22;
-  --shadow: 0 10px 26px rgba(23, 32, 42, 0.06);
+  --shadow: none;
 }
 
 html {
@@ -24,9 +24,7 @@ html {
 body {
   margin: 0;
   color: var(--text);
-  background:
-    linear-gradient(180deg, #eef4f8 0, var(--bg) 280px),
-    var(--bg);
+  background: var(--bg);
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
 }
@@ -611,3 +609,119 @@ a {
     margin-top: 10px;
   }
 }
+
+/* Shared, quiet layout for the launch preview. */
+html { scroll-padding-top: 24px; }
+.appShell { min-height: 100dvh; display: flex; flex-direction: column; }
+.appShell > main { flex: 1; }
+.appTopbar { min-height: 76px; background: #fff; backdrop-filter: none; gap: 24px; padding: 16px max(24px, calc((100vw - 1120px) / 2)); }
+.appBrand { font-size: 19px; font-weight: 500; letter-spacing: -.5px; }
+.appNav { gap: 24px; }
+.appNav > a:last-child { color: var(--primary); }
+.page { padding-top: 56px; padding-bottom: 72px; }
+.siteHeader h1 { font-weight: 500; letter-spacing: -1px; line-height: 1.2; }
+h2, h3 { font-weight: 500; }
+.lookupResult, .lookupForm, .postCard, .postArticle, .adminCard { box-shadow: none; border-radius: 10px; padding: 28px; }
+.lookupFormInline { padding: 0; }
+.lookupForm label { font-weight: 500; }
+.requestItem { background: #fff; padding: 20px; }
+.plainButton, .lookupRow button, .lookupForm > button { font-weight: 500; border-radius: 6px; }
+.plainButton { display: inline-flex; align-items: center; gap: 24px; text-decoration: none; min-height: 46px; }
+:focus-visible { outline: 3px solid #8ab4f8; outline-offset: 3px; }
+button, input, textarea { font: inherit; }
+button:disabled { cursor: default; opacity: .6; }
+.landingPage { width: min(1060px, 100%); padding: 0 32px 64px; }
+.landingHero { padding: 90px 0 60px; max-width: 800px; }
+.landingHero .eyebrow { font-weight: 400; font-size: 14px; margin-bottom: 24px; }
+.landingHero h1 { margin: 0; font-weight: 400; font-size: clamp(38px, 5.5vw, 64px); line-height: 1.14; letter-spacing: -2.4px; }
+.landingHero h1 span { color: var(--primary); }
+.heroDescription { margin: 24px 0 28px; color: var(--muted); font-size: 19px; line-height: 1.65; }
+.heroActions { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; }
+.quietLink { text-decoration: none; font-weight: 500; }
+.finePrint { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.landingHero > .finePrint { margin-top: 20px; }
+.publicationExample { display: grid; grid-template-columns: 1fr 56px 1fr; align-items: center; padding-bottom: 64px; }
+.examplePost { min-width: 0; padding: 28px; border: 1px solid var(--border); border-radius: 12px; }
+.examplePost h2 { font-size: 20px; line-height: 1.4; margin: 22px 0 12px; }
+.examplePost > p:not(.exampleLabel) { color: var(--muted); font-size: 15px; line-height: 1.7; }
+.exampleLabel { font-size: 12px; margin: 0 0 24px; color: var(--muted); }
+.exampleAuthor { display: flex; gap: 12px; align-items: center; font-size: 14px; }
+.exampleAuthor strong { font-weight: 500; }
+.exampleAuthor div { display: grid; gap: 3px; }
+.exampleAuthor div > span { color: var(--muted); font-size: 12px; }
+.exampleAvatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #e8f0fe; color: var(--primary); }
+.exampleArrow { color: #9aa0a6; text-align: center; font-size: 26px; }
+.exampleSiteBrand { display: flex; gap: 12px; align-items: baseline; justify-content: space-between; padding-bottom: 17px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.exampleSiteBrand span { font-size: 12px; color: var(--muted); }
+.exampleRead { color: var(--primary); font-size: 12px; }
+.landingSection { padding: 56px 0; border-top: 1px solid var(--border); }
+.landingSection > h2 { font-size: 30px; letter-spacing: -.7px; margin: 8px 0 32px; }
+.stepsGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.stepNumber { color: var(--primary); font-size: 13px; }
+.stepsGrid h3, .optionsGrid h3 { font-size: 20px; margin: 16px 0 12px; }
+.stepsGrid p, .optionsGrid p { color: var(--muted); line-height: 1.7; margin: 0 0 20px; }
+.optionsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.optionsGrid article + article { padding-left: 48px; border-left: 1px solid var(--border); }
+.availability { color: var(--primary); font-size: 12px; }
+.availabilityLater { color: var(--muted); }
+.betaLimits { margin: 28px 0 0; max-width: 630px; }
+.channelSearch { max-width: 640px; }
+.channelSearch > h2 { margin-bottom: 8px; }
+.appFooter { display: flex; gap: 24px; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding: 28px max(24px, calc((100vw - 1120px) / 2)); color: var(--muted); font-size: 13px; }
+.appFooter > div { display: flex; flex-wrap: wrap; gap: 24px; }
+.appFooter .linkButton { font-size: 13px; }
+.cookieNotice { position: fixed; z-index: 10; bottom: 20px; left: 20px; display: flex; align-items: center; gap: 20px; width: min(580px, calc(100% - 40px)); padding: 16px 20px; border: 1px solid var(--border); border-radius: 10px; background: #fff; box-shadow: 0 3px 14px #20212412; }
+.cookieNotice p { margin: 0; font-size: 13px; }
+.cookieNotice .linkButton { color: var(--primary); font-size: 13px; }
+.cookieNotice .authButton { font-size: 13px; min-height: 40px; }
+.modal { position: fixed; width: min(440px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 40px 32px 28px; border: 1px solid var(--border); border-radius: 14px; color: var(--text); background: #fff; overflow-y: auto; overscroll-behavior: contain; }
+.modal::backdrop { background: rgb(32 33 36 / 28%); }
+.modalClose { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; font-size: 26px; }
+.modalClose:hover { background: #f1f3f4; }
+.loginPanel h1 { font-size: 25px; font-weight: 500; letter-spacing: -.5px; line-height: 1.3; margin: 0 0 12px; }
+.loginPanel > .muted { font-size: 14px; margin-bottom: 24px; }
+.loginPanel .authActions { display: grid; gap: 10px; margin-top: 0; }
+.loginPanel .authButton { width: 100%; min-height: 46px; }
+.loginPanel .emailLoginToggle { width: 100%; }
+.loginPanel .emailLogin { width: 100%; margin-top: 20px; font-size: 14px; }
+.emailLogin button[type=submit] { background: var(--primary); color: #fff; border-color: var(--primary); }
+.loginPanel > .finePrint { margin-top: 24px; font-size: 12px; }
+.noticeText h2 { margin: 0 0 20px; font-size: 24px; }
+.noticeText p { font-size: 14px; line-height: 1.7; }
+.authPage { display: block; min-height: auto; }
+.authPage > .loginPanel { width: min(380px, 100%); margin: 0 auto; }
+@media (max-width: 833px) {
+  .appNav { gap: 16px; }
+  .stepsGrid { gap: 24px; }
+  .examplePost { padding: 20px; }
+  .publicationExample { grid-template-columns: 1fr 36px 1fr; }
+  .optionsGrid { gap: 28px; }
+  .optionsGrid article + article { padding-left: 28px; }
+}
+@media (max-width: 600px) {
+  .appTopbar { display: flex; flex-wrap: wrap; padding: 18px 20px; gap: 14px; }
+  .appNav { width: 100%; margin: 0; gap: 14px; justify-content: flex-start; font-size: 13px; }
+  .appNav .accountMenu { width: auto; }
+  .landingPage { padding: 0 20px 32px; }
+  .landingHero { padding: 56px 0 40px; }
+  .landingHero h1 { letter-spacing: -1.5px; font-size: clamp(32px, 8vw, 44px); }
+  .heroDescription { font-size: 16px; }
+  .desktopBreak { display: none; }
+  .heroActions { gap: 18px; font-size: 14px; }
+  .publicationExample { grid-template-columns: 1fr; gap: 16px; padding-bottom: 40px; }
+  .exampleArrow { transform: rotate(90deg); line-height: 1; }
+  .examplePost { padding: 24px; }
+  .stepsGrid, .optionsGrid { grid-template-columns: 1fr; gap: 24px; }
+  .optionsGrid article + article { border-left: 0; border-top: 1px solid var(--border); padding: 28px 0 0; }
+  .landingSection { padding: 36px 0; }
+  .landingSection > h2 { font-size: 26px; }
+  .appFooter { align-items: flex-start; flex-direction: column; padding: 24px 20px 120px; gap: 16px; }
+  .appFooter > div { gap: 16px; }
+  .cookieNotice { bottom: 12px; left: 12px; width: calc(100% - 24px); padding: 12px 14px; gap: 12px; }
+  .modal { padding: 44px 24px 24px; }
+  .lookupResult, .lookupForm, .postCard, .postArticle { padding: 20px; }
+  .lookupFormInline { padding: 0; }
+}
+
+.cookieNotice .authButton { flex-shrink: 0; white-space: nowrap; }
+.loginPanel:has(.emailLogin) .authActions { display: none; }

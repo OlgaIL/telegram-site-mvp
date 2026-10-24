@@ -4,9 +4,14 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { getMe, logout } from '@/lib/api';
+import Modal from './Modal';
+import LoginPanel from './LoginPanel';
+import SiteNotices from './SiteNotices';
 
 export default function AppShell({ children }) {
   const pathname = usePathname();
+  const [loginTarget, setLoginTarget] = useState(null);
+  const [loginBusy, setLoginBusy] = useState(false);
   const [account, setAccount] = useState({
     loading: true,
     authenticated: false,
@@ -51,8 +56,21 @@ export default function AppShell({ children }) {
   const displayName = account.user?.name || account.user?.email || 'Аккаунт';
   const isLoginPage = pathname === '/login';
 
+  function interceptLogin(event) {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const anchor = event.target.closest('a[href]');
+    if (!anchor || anchor.target || anchor.hasAttribute('download')) return;
+    const url = new URL(anchor.href, window.location.href);
+    if (url.origin !== window.location.origin) return;
+    if (url.pathname === '/login' || (url.pathname === '/add-channel' && !account.loading && !account.authenticated)) {
+      event.preventDefault();
+      anchor.focus({ preventScroll: true });
+      setLoginTarget(url.pathname === '/login' ? (url.searchParams.get('returnTo') || '/dashboard') : url.pathname + url.search);
+    }
+  }
+
   return (
-    <>
+    <div className="appShell" onClickCapture={interceptLogin}>
       <header className="appTopbar">
         <Link className="appBrand" href="/">
           Telegram Зеркало
@@ -60,8 +78,8 @@ export default function AppShell({ children }) {
 
         {!isLoginPage ? (
           <nav className="appNav" aria-label="Основная навигация">
-            <Link href="/">Поиск</Link>
-            <Link href="/site/default">Демо-сайт</Link>
+            <Link href="/#how">Как работает</Link>
+            <Link href="/site/default">Пример</Link>
             <Link href={addChannelHref}>Добавить канал</Link>
 
             {account.authenticated ? (
@@ -74,7 +92,7 @@ export default function AppShell({ children }) {
                   )}
                   <span className="accountText">
                     <span className="accountName">{displayName}</span>
-                    <span className="accountPlan">Бесплатный тариф</span>
+                    <span className="accountPlan">Бесплатная бета</span>
                   </span>
                 </Link>
                 <button className="linkButton" type="button" onClick={handleLogout}>
@@ -82,13 +100,15 @@ export default function AppShell({ children }) {
                 </button>
               </div>
             ) : (
-              <Link href="/login">{account.loading ? 'Вход' : 'Вход'}</Link>
+              <Link href="/login">Вход</Link>
             )}
           </nav>
         ) : null}
       </header>
 
       {children}
-    </>
+      <SiteNotices />
+      {loginTarget !== null && <Modal busy={loginBusy} labelledBy="login-title" onClose={() => setLoginTarget(null)}><LoginPanel returnTo={loginTarget} onBusyChange={setLoginBusy} /></Modal>}
+    </div>
   );
 }
