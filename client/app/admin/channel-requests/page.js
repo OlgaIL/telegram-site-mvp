@@ -99,7 +99,7 @@ export default async function ChannelRequestsAdminPage({ searchParams }) {
   const params = await searchParams;
 
   return (
-    <main className="page">
+    <main className="page ym-hide-content">
       <p className="backLink">
         <Link href="/">Назад к поиску</Link>
       </p>

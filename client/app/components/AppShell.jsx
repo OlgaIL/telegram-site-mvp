@@ -83,7 +83,7 @@ export default function AppShell({ children }) {
             <Link href={addChannelHref}>Добавить канал</Link>
 
             {account.authenticated ? (
-              <div className="accountMenu">
+              <div className="accountMenu ym-hide-content">
                 <Link className="accountLink" href="/dashboard">
                   {account.user?.avatarUrl ? (
                     <img className="accountAvatar" src={account.user.avatarUrl} alt="" />

@@ -1,5 +1,6 @@
 import './globals.css';
 import AppShell from './components/AppShell';
+import Metrika from './components/Metrika';
 
 export const metadata = {
   title: 'Telegram Зеркало — сайт вашего Telegram-канала',
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="ru">
       <body>
         <AppShell>{children}</AppShell>
+        <Metrika />
       </body>
     </html>
   );

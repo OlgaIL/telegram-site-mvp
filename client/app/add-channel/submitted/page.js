@@ -29,7 +29,7 @@ export default async function ChannelRequestSubmittedPage({ searchParams }) {
     : null;
 
   return (
-    <main className="page pageNarrow">
+    <main className="page pageNarrow ym-hide-content">
       <p className="backLink"><Link href="/dashboard">В кабинет</Link></p>
       <header className="siteHeader">
         <p className="eyebrow">Заявка №{request.id}</p>

@@ -85,12 +85,13 @@ export default function EmailLoginForm({ returnTo, onBusyChange }) {
   }
 
   return (
-    <form className="emailLogin" onSubmit={step === 'email' ? sendCode : verify} aria-busy={pending}>
+    <form className="emailLogin ym-hide-content" onSubmit={step === 'email' ? sendCode : verify} aria-busy={pending}>
       {step === 'email' ? (
         <>
           <label htmlFor={id + '-email'}>Ваша почта</label>
           <input
             id={id + '-email'}
+            className="ym-disable-keys"
             type="email"
             autoComplete="email"
             autoFocus
@@ -111,6 +112,7 @@ export default function EmailLoginForm({ returnTo, onBusyChange }) {
           <input
             key="code"
             id={id + '-code'}
+            className="ym-disable-keys"
             type="text"
             inputMode="numeric"
             autoComplete="one-time-code"

@@ -21,7 +21,7 @@ export default async function AddChannelPage({ searchParams }) {
   const channel = String(params?.channel || '').trim();
 
   return (
-    <main className="page pageNarrow">
+    <main className="page pageNarrow ym-hide-content">
       <p className="backLink">
         <Link href="/">На главную</Link>
       </p>
@@ -59,6 +59,7 @@ export default async function AddChannelPage({ searchParams }) {
 
         <label htmlFor="email">Email для связи</label>
         <input
+          className="ym-disable-keys"
           id="email"
           name="email"
           type="email"
@@ -69,6 +70,7 @@ export default async function AddChannelPage({ searchParams }) {
 
         <label htmlFor="comment">Комментарий</label>
         <textarea
+          className="ym-disable-keys"
           id="comment"
           name="comment"
           rows="4"
